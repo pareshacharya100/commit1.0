@@ -43,15 +43,18 @@ router.post(
 // @route    GET api/posts
 // @desc     Get all posts
 // @access   Private
+
 router.get('/', auth, async (req, res) => {
   try {
     const posts = await Post.find().sort({ date: -1 });
+    console.log('Sending posts:', posts); // Add this line
     res.json(posts);
   } catch (err) {
-    console.error(err.message);
+    console.error('Error fetching posts:', err.message); // Add this line
     res.status(500).send('Server Error');
   }
 });
+
 
 // @route    GET api/posts/:id
 // @desc     Get post by ID
