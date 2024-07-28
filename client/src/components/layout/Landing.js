@@ -12,10 +12,9 @@ const Landing = ({ isAuthenticated }) => {
     <section className="landing">
       <div className="dark-overlay">
         <div className="landing-inner">
-          <h1 className="x-large">Developer Connector</h1>
+          <h1 className="x-large">Commit.ai</h1>
           <p className="lead">
-            Create a developer profile/portfolio, share posts and get help from
-            other developers
+          Challenge friends, track your progress, and achieve your fitness goals with real-time AI support on commit.ai.
           </p>
           <div className="buttons">
             <Link to="/register" className="btn btn-primary">
