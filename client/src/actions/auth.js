@@ -20,7 +20,7 @@ import {
 // Load User
 export const loadUser = () => async (dispatch) => {
   try {
-    const res = await api.get('/auth');
+    const res = await api.get('/api/auth');
 
     dispatch({
       type: USER_LOADED,
@@ -37,7 +37,7 @@ export const loadUser = () => async (dispatch) => {
 export const register = (formData) => async (dispatch) => {
   try {
     //const res = await api.post('/users', formData);
-    const res = await api.post('/users', formData);
+    const res = await api.post('/api/users', formData);
 
     dispatch({
       type: REGISTER_SUCCESS,
@@ -62,7 +62,7 @@ export const login = (email, password) => async (dispatch) => {
   const body = { email, password };
 
   try {
-    const res = await api.post('/auth', body);
+    const res = await api.post('/api/auth', body);
 
     dispatch({
       type: LOGIN_SUCCESS,
