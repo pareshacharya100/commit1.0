@@ -92,7 +92,7 @@
   // Add post
   export const addPost = (formData) => async (dispatch) => {
     try {
-      const res = await api.post('api/posts', formData);
+      const res = await api.post('/api/posts', formData);
 
       dispatch({
         type: ADD_POST,
