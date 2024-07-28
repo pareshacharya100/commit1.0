@@ -21,7 +21,7 @@ import {
 // Get posts
 export const getPosts = () => async (dispatch) => {
   try {
-    const res = await api.get('/posts');
+    const res = await api.get('/api/posts');
     console.log('Fetched posts:', res.data); // Add this line
     dispatch({
       type: GET_POSTS,
