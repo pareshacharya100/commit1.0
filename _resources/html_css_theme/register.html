@@ -4,17 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link
-      href="https://fonts.googleapis.com/css?family=Raleway"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" />
     <link
       rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
       integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
       crossorigin="anonymous"
     />
-
     <link rel="stylesheet" href="css/style.css" />
     <title>Welcome To The Developer Connector</title>
   </head>
@@ -32,7 +28,7 @@
     <section class="container">
       <h1 class="large text-primary">Sign Up</h1>
       <p class="lead"><i class="fas fa-user"></i> Create Your Account</p>
-      <form class="form" action="create-profile.html">
+      <form class="form" id="register-form">
         <div class="form-group">
           <input type="text" placeholder="Name" name="name" required />
         </div>
@@ -65,5 +61,46 @@
         Already have an account? <a href="login.html">Sign In</a>
       </p>
     </section>
+
+    <script>
+      document.getElementById('register-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const name = document.querySelector('input[name="name"]').value;
+        const email = document.querySelector('input[name="email"]').value;
+        const password = document.querySelector('input[name="password"]').value;
+        const password2 = document.querySelector('input[name="password2"]').value;
+
+        if (password !== password2) {
+          alert('Passwords do not match');
+          return;
+        }
+
+        const data = { name, email, password };
+
+        try {
+          const response = await fetch('/api/users', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            alert(errorData.errors.map(error => error.msg).join('\n'));
+            return;
+          }
+
+          const result = await response.json();
+          alert('Registration successful');
+          // You can redirect the user to the login page or dashboard here
+        } catch (error) {
+          console.error('Error:', error);
+          alert('An error occurred. Please try again.');
+        }
+      });
+    </script>
   </body>
 </html>
