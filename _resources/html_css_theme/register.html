@@ -79,7 +79,7 @@
         const data = { name, email, password };
 
         try {
-          const response = await fetch('/api/users', {
+          const response = await fetch('http://localhost:5003/api/users', { // Update the URL to match your backend
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
