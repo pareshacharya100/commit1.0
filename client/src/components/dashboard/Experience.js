@@ -5,6 +5,10 @@ import { deleteExperience } from '../../actions/profile';
 import formatDate from '../../utils/formatDate';
 
 const Experience = ({ experience, deleteExperience }) => {
+  if (!experience || !Array.isArray(experience)) {
+    return <div>No experience data available</div>;
+  }
+
   const experiences = experience.map((exp) => (
     <tr key={exp._id}>
       <td>{exp.company}</td>
