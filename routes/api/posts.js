@@ -44,18 +44,17 @@ router.post(
 // @desc     Get all posts
 // @access   Private
 
+
 router.get('/', auth, async (req, res) => {
   try {
     const posts = await Post.find().sort({ date: -1 });
-    console.log('Sending posts:', posts); // Add this line
+    console.log('Sending posts:', posts);  // Add this log line
     res.json(posts);
   } catch (err) {
-    console.error('Error fetching posts:', err.message); // Add this line
+    console.error('Error fetching posts:', err.message);  // Add this log line
     res.status(500).send('Server Error');
   }
 });
-
-
 // @route    GET api/posts/:id
 // @desc     Get post by ID
 // @access   Private
@@ -74,6 +73,7 @@ router.get('/:id', auth, checkObjectId('id'), async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
 
 // @route    DELETE api/posts/:id
 // @desc     Delete a post
