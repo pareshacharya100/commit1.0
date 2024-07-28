@@ -12,13 +12,6 @@ import {
   NO_REPOS
 } from './types';
 
-/*
-  NOTE: we don't need a config object for axios as the
- default headers in axios are already Content-Type: application/json
- also axios stringifies and parses JSON for you, so no need for 
- JSON.stringify or JSON.parse
-*/
-
 // Get current users profile
 export const getCurrentProfile = () => async (dispatch) => {
   try {
@@ -31,7 +24,7 @@ export const getCurrentProfile = () => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: { msg: err.response?.statusText || 'Server Error', status: err.response?.status }
     });
   }
 };
@@ -50,7 +43,7 @@ export const getProfiles = () => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: { msg: err.response?.statusText || 'Server Error', status: err.response?.status }
     });
   }
 };
@@ -67,7 +60,7 @@ export const getProfileById = (userId) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: { msg: err.response?.statusText || 'Server Error', status: err.response?.status }
     });
   }
 };
@@ -104,7 +97,7 @@ export const createProfile =
         setAlert(edit ? 'Profile Updated' : 'Profile Created', 'success')
       );
     } catch (err) {
-      const errors = err.response.data.errors;
+      const errors = err.response?.data?.errors;
 
       if (errors) {
         errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
@@ -112,7 +105,7 @@ export const createProfile =
 
       dispatch({
         type: PROFILE_ERROR,
-        payload: { msg: err.response.statusText, status: err.response.status }
+        payload: { msg: err.response?.statusText || 'Server Error', status: err.response?.status }
       });
     }
   };
@@ -130,7 +123,7 @@ export const addExperience = (formData) => async (dispatch) => {
     dispatch(setAlert('Experience Added', 'success'));
     return res.data;
   } catch (err) {
-    const errors = err.response.data.errors;
+    const errors = err.response?.data?.errors;
 
     if (errors) {
       errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
@@ -138,7 +131,7 @@ export const addExperience = (formData) => async (dispatch) => {
 
     dispatch({
       type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: { msg: err.response?.statusText || 'Server Error', status: err.response?.status }
     });
   }
 };
@@ -156,7 +149,7 @@ export const addEducation = (formData) => async (dispatch) => {
     dispatch(setAlert('Education Added', 'success'));
     return res.data;
   } catch (err) {
-    const errors = err.response.data.errors;
+    const errors = err.response?.data?.errors;
 
     if (errors) {
       errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
@@ -164,7 +157,7 @@ export const addEducation = (formData) => async (dispatch) => {
 
     dispatch({
       type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: { msg: err.response?.statusText || 'Server Error', status: err.response?.status }
     });
   }
 };
@@ -183,7 +176,7 @@ export const deleteExperience = (id) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: { msg: err.response?.statusText || 'Server Error', status: err.response?.status }
     });
   }
 };
@@ -202,7 +195,7 @@ export const deleteEducation = (id) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: { msg: err.response?.statusText || 'Server Error', status: err.response?.status }
     });
   }
 };
@@ -220,7 +213,7 @@ export const deleteAccount = () => async (dispatch) => {
     } catch (err) {
       dispatch({
         type: PROFILE_ERROR,
-        payload: { msg: err.response.statusText, status: err.response.status }
+        payload: { msg: err.response?.statusText || 'Server Error', status: err.response?.status }
       });
     }
   }

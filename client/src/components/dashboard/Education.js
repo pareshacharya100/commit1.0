@@ -5,6 +5,10 @@ import { deleteEducation } from '../../actions/profile';
 import formatDate from '../../utils/formatDate';
 
 const Education = ({ education, deleteEducation }) => {
+  if (!education || !Array.isArray(education)) {
+    return <div>No education data available</div>;
+  }
+
   const educations = education.map((edu) => (
     <tr key={edu._id}>
       <td>{edu.school}</td>
