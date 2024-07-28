@@ -5,10 +5,16 @@ import PostItem from './PostItem';
 import PostForm from './PostForm';
 import { getPosts } from '../../actions/post';
 
-const Posts = ({ getPosts, post: { posts } }) => {
+
+const Posts = ({ getPosts, post: { posts, loading } }) => {
   useEffect(() => {
     getPosts();
   }, [getPosts]);
+
+  if (!Array.isArray(posts)) {
+    console.error('Posts is not an array:', posts); // Add this line
+    return <p>No posts available</p>;
+  }
 
   return (
     <section className="container">

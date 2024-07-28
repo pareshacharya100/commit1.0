@@ -22,12 +22,13 @@ import {
 export const getPosts = () => async (dispatch) => {
   try {
     const res = await api.get('/posts');
-
+    console.log('Fetched posts:', res.data); // Add this line
     dispatch({
       type: GET_POSTS,
       payload: res.data
     });
   } catch (err) {
+    console.error('Error fetching posts:', err.response); // Add this line
     dispatch({
       type: POST_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status }
