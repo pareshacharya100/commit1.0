@@ -6,3 +6,15 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+[context.production.environment]
+  NPM_FLAGS = "--legacy-peer-deps"
+
+[context.deploy-preview.environment]
+  NPM_FLAGS = "--legacy-peer-deps"
+
+[context.branch-deploy.environment]
+  NPM_FLAGS = "--legacy-peer-deps"
+
+[context.next.environment]
+  NPM_FLAGS = "--legacy-peer-deps"
