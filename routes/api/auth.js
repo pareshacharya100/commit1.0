@@ -1,78 +1,79 @@
-const express = require('express');
-const router = express.Router();
-const bcrypt = require('bcryptjs');
-const auth = require('../../middleware/auth');
-const jwt = require('jsonwebtoken');
-const config = require('config');
-const { check, validationResult } = require('express-validator');
+import api from '../utils/api';
+import { setAlert } from './alert';
+import {
+  REGISTER_SUCCESS,
+  REGISTER_FAIL,
+  USER_LOADED,
+  AUTH_ERROR,
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
+  LOGOUT
+} from './types';
 
-const User = require('../../models/User');
-
-// @route    GET api/auth
-// @desc     Get user by token
-// @access   Private
-router.get('/', auth, async (req, res) => {
+// Load User
+export const loadUser = () => async (dispatch) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
-    res.json(user);
+    const res = await api.get('/api/auth');
+
+    dispatch({
+      type: USER_LOADED,
+      payload: res.data
+    });
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+    dispatch({
+      type: AUTH_ERROR
+    });
   }
-});
+};
 
-// @route    POST api/auth
-// @desc     Authenticate user & get token
-// @access   Public
-router.post(
-  '/',
-  check('email', 'Please include a valid email').isEmail(),
-  check('password', 'Password is required').exists(),
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+// Register User
+export const register = (formData) => async (dispatch) => {
+  try {
+    const res = await api.post('/api/users', formData);
+
+    dispatch({
+      type: REGISTER_SUCCESS,
+      payload: res.data
+    });
+    dispatch(loadUser());
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
     }
 
-    const { email, password } = req.body;
-
-    try {
-      let user = await User.findOne({ email });
-
-      if (!user) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: 'Invalid Credentials' }] });
-      }
-
-      const isMatch = await bcrypt.compare(password, user.password);
-
-      if (!isMatch) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: 'Invalid Credentials' }] });
-      }
-
-      const payload = {
-        user: {
-          id: user.id
-        }
-      };
-
-      jwt.sign(
-        payload,
-        config.get('jwtSecret'),
-        { expiresIn: '5 days' },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token });
-        }
-      );
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server error');
-    }
+    dispatch({
+      type: REGISTER_FAIL
+    });
   }
-);
+};
 
-module.exports = router;
+// Login User
+export const login = (email, password) => async (dispatch) => {
+  const body = { email, password };
+
+  try {
+    const res = await api.post('/api/auth', body);
+
+    dispatch({
+      type: LOGIN_SUCCESS,
+      payload: res.data
+    });
+
+    dispatch(loadUser());
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+    }
+
+    dispatch({
+      type: LOGIN_FAIL
+    });
+  }
+};
+
+// Logout
+export const logout = () => ({ type: LOGOUT });
