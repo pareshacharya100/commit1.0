@@ -1,1 +1,2 @@
-/api/*  https://api.icommit.ai/api/:splat  200
+/api/*  https://api.icommit.ai/:splat  200
+/* /index.html  200
