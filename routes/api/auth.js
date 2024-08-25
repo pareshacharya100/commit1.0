@@ -1,15 +1,8 @@
 // actions/auth.js
 const api = require('../utils/api');
 const { setAlert } = require('./alert');
-import {
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
-  USER_LOADED,
-  AUTH_ERROR,
-  LOGIN_SUCCESS,
-  LOGIN_FAIL,
-  LOGOUT
-} from './types';
+const { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT } = require('./types');
+
 
 // Load User
 export const loadUser = () => async (dispatch) => {
