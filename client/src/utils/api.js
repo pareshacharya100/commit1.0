@@ -4,11 +4,12 @@ import { LOGOUT } from '../actions/types';
 
 // Create an instance of axios
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5003/api',
+  baseURL: process.env.REACT_APP_API_URL || 'https://www.icommit.ai/api',
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   }
 });
+
 /*
   NOTE: intercept any error responses from the api
  and check if the token is no longer valid.
