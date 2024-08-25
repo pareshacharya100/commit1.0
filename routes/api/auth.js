@@ -1,3 +1,4 @@
+// actions/auth.js
 import api from '../utils/api';
 import { setAlert } from './alert';
 import {
