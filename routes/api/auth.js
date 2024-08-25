@@ -3,9 +3,8 @@ const api = require('../utils/api');
 const { setAlert } = require('./alert');
 const { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT } = require('./types');
 
-
 // Load User
-export const loadUser = () => async (dispatch) => {
+const loadUser = () => async (dispatch) => {
   try {
     const res = await api.get('/api/auth');
 
@@ -21,7 +20,7 @@ export const loadUser = () => async (dispatch) => {
 };
 
 // Register User
-export const register = (formData) => async (dispatch) => {
+const register = (formData) => async (dispatch) => {
   try {
     const res = await api.post('/api/users', formData);
 
@@ -44,7 +43,7 @@ export const register = (formData) => async (dispatch) => {
 };
 
 // Login User
-export const login = (email, password) => async (dispatch) => {
+const login = (email, password) => async (dispatch) => {
   const body = { email, password };
 
   try {
@@ -70,4 +69,6 @@ export const login = (email, password) => async (dispatch) => {
 };
 
 // Logout
-export const logout = () => ({ type: LOGOUT });
+const logout = () => ({ type: LOGOUT });
+
+module.exports = { loadUser, register, login, logout };
