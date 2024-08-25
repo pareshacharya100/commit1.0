@@ -1,6 +1,6 @@
 // actions/auth.js
-const api = require('../utils/api');
-const { setAlert } = require('./alert');
+import api from '../utils/api';
+import { setAlert } from './alert';
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
