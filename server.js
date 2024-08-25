@@ -10,7 +10,7 @@ connectDB();
 // Init Middleware
 app.use(express.json());
 app.use(cors({
-  origin: ['https://www.icommit.ai', 'https://deploy-preview-44--icommitai.netlify.app'], // Add both your production and preview URLs
+  origin: '*', // Add both your production and preview URLs
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
