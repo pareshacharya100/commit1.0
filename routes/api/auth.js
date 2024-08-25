@@ -1,74 +1,80 @@
-// actions/auth.js
-const api = require('../utils/api');
-const { setAlert } = require('./alert');
-const { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT } = require('./types');
+const express = require('express');
+const router = express.Router();
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const config = require('config');
+const auth = require('../../middleware/auth');
+const { check, validationResult } = require('express-validator');
 
-// Load User
-const loadUser = () => async (dispatch) => {
+const User = require('../../models/User');
+
+// @route    GET api/auth
+// @desc     Get user by token
+// @access   Private
+router.get('/', auth, async (req, res) => {
   try {
-    const res = await api.get('/api/auth');
-
-    dispatch({
-      type: USER_LOADED,
-      payload: res.data
-    });
+    const user = await User.findById(req.user.id).select('-password');
+    res.json(user);
   } catch (err) {
-    dispatch({
-      type: AUTH_ERROR
-    });
+    console.error(err.message);
+    res.status(500).send('Server Error');
   }
-};
+});
 
-// Register User
-const register = (formData) => async (dispatch) => {
-  try {
-    const res = await api.post('/api/users', formData);
-
-    dispatch({
-      type: REGISTER_SUCCESS,
-      payload: res.data
-    });
-    dispatch(loadUser());
-  } catch (err) {
-    const errors = err.response.data.errors;
-
-    if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+// @route    POST api/auth
+// @desc     Authenticate user & get token
+// @access   Public
+router.post(
+  '/',
+  [
+    check('email', 'Please include a valid email').isEmail(),
+    check('password', 'Password is required').exists()
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
 
-    dispatch({
-      type: REGISTER_FAIL
-    });
-  }
-};
+    const { email, password } = req.body;
 
-// Login User
-const login = (email, password) => async (dispatch) => {
-  const body = { email, password };
+    try {
+      let user = await User.findOne({ email });
 
-  try {
-    const res = await api.post('/api/auth', body);
+      if (!user) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Invalid Credentials' }] });
+      }
 
-    dispatch({
-      type: LOGIN_SUCCESS,
-      payload: res.data
-    });
+      const isMatch = await bcrypt.compare(password, user.password);
 
-    dispatch(loadUser());
-  } catch (err) {
-    const errors = err.response.data.errors;
+      if (!isMatch) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Invalid Credentials' }] });
+      }
 
-    if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+      const payload = {
+        user: {
+          id: user.id
+        }
+      };
+
+      jwt.sign(
+        payload,
+        config.get('jwtSecret'),
+        { expiresIn: '5 days' },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
     }
-
-    dispatch({
-      type: LOGIN_FAIL
-    });
   }
-};
+);
 
-// Logout
-const logout = () => ({ type: LOGOUT });
-
-module.exports = { loadUser, register, login, logout };
+module.exports = router;
