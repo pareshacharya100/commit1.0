@@ -9,11 +9,11 @@ connectDB();
 
 // Init Middleware
 app.use(express.json());
-const corsOptions = {
-  origin: 'https://your-netlify-domain.netlify.app', // replace with your Netlify domain
-  optionsSuccessStatus: 200,
-};
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: '*', // Allows requests from any origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 // Define Routes
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/auth', require('./routes/api/auth'));
