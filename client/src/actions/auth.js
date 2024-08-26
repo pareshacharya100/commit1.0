@@ -1,11 +1,11 @@
-// actions/auth.js
+// src/actions/auth.js
 
-const api = require('../utils/api');
-const { setAlert } = require('./alert');
-const { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT } = require('./types');
+import api from '../utils/api';
+import { setAlert } from './alert';
+import { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT } from './types';
 
 // Load User
-const loadUser = () => async (dispatch) => {
+export const loadUser = () => async (dispatch) => {
   try {
     const res = await api.get('/api/auth');
     dispatch({
@@ -20,8 +20,7 @@ const loadUser = () => async (dispatch) => {
 };
 
 // Register User
-// Register User
-const register = (formData) => async (dispatch) => {
+export const register = (formData) => async (dispatch) => {
   try {
     const res = await api.post('/api/users', formData);
     console.log('API Response:', res);  // Log the response object
@@ -50,9 +49,8 @@ const register = (formData) => async (dispatch) => {
   }
 };
 
-
 // Login User
-const login = (email, password) => async (dispatch) => {
+export const login = (email, password) => async (dispatch) => {
   const body = { email, password };
   try {
     const res = await api.post('/api/auth', body);
@@ -62,7 +60,7 @@ const login = (email, password) => async (dispatch) => {
     });
     dispatch(loadUser());
   } catch (err) {
-    const errors = err.response.data.errors;
+    const errors = err.response?.data?.errors;
     if (errors) {
       errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
     }
@@ -73,11 +71,4 @@ const login = (email, password) => async (dispatch) => {
 };
 
 // Logout
-const logout = () => ({ type: LOGOUT });
-
-module.exports = {
-  loadUser,
-  register,
-  login,
-  logout
-};
+export const logout = () => ({ type: LOGOUT });
