@@ -20,24 +20,33 @@ const loadUser = () => async (dispatch) => {
 };
 
 // Register User
-const register = (formData) => async (dispatch) => {
+export const register = (formData) => async (dispatch) => {
   try {
     const res = await api.post('/api/users', formData);
+    console.log('API Response:', res);  // Log the response object
+
     dispatch({
       type: REGISTER_SUCCESS,
       payload: res.data,
     });
     dispatch(loadUser());
   } catch (err) {
-    const errors = err.response.data.errors;
+    console.error('Error:', err.response);  // Log the full error response
+
+    const errors = err.response?.data?.errors;
+
     if (errors) {
       errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
     }
+
     dispatch({
       type: REGISTER_FAIL,
     });
   }
 };
+
+
+
 
 // Login User
 const login = (email, password) => async (dispatch) => {
