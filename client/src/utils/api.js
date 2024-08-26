@@ -2,6 +2,8 @@ import axios from 'axios';
 import store from '../store';
 import { LOGOUT } from '../actions/types';
 
+console.log('API Base URL:', process.env.REACT_APP_API_URL);
+
 // Create an instance of axios
 const api = axios.create({
   baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5003',

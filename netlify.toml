@@ -2,11 +2,6 @@
   command = "NODE_OPTIONS=--openssl-legacy-provider npm run build"
   publish = "client/build"
 
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
-  force = true
 
 [[redirects]]
   from = "/*"
