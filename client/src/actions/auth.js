@@ -20,7 +20,7 @@ const loadUser = () => async (dispatch) => {
 };
 
 // Register User
-export const register = (formData) => async (dispatch) => {
+const register = (formData) => async (dispatch) => {
   try {
     const res = await api.post('/api/users', formData);
     console.log('API Response:', res);  // Log the response object
@@ -44,9 +44,6 @@ export const register = (formData) => async (dispatch) => {
     });
   }
 };
-
-
-
 
 // Login User
 const login = (email, password) => async (dispatch) => {
