@@ -20,6 +20,7 @@ const loadUser = () => async (dispatch) => {
 };
 
 // Register User
+// Register User
 const register = (formData) => async (dispatch) => {
   try {
     const res = await api.post('/api/users', formData);
@@ -31,12 +32,16 @@ const register = (formData) => async (dispatch) => {
     });
     dispatch(loadUser());
   } catch (err) {
-    console.error('Error:', err.response);  // Log the full error response
+    // Log the entire error response
+    console.error('Error:', err);
 
+    // Extract error message safely
     const errors = err.response?.data?.errors;
 
     if (errors) {
       errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+    } else {
+      dispatch(setAlert('An unknown error occurred', 'danger'));
     }
 
     dispatch({
@@ -44,6 +49,7 @@ const register = (formData) => async (dispatch) => {
     });
   }
 };
+
 
 // Login User
 const login = (email, password) => async (dispatch) => {
