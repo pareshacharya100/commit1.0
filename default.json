@@ -1,5 +1,5 @@
 {
-    "mongoURI": "mongodb+srv://pareshacharya1201:30S2CSAKeYc3tXK2@cluster0.q7nmxi0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+    "mongoURI": "mongodb+srv://pareshacharya1201:<db_password>@cluster0.q7nmxi0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
     "jwtSecret": "secret",
     "githubToken": "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"
   } 
