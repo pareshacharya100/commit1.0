@@ -2,11 +2,19 @@
   command = "NODE_OPTIONS=--openssl-legacy-provider npm run build"
   publish = "client/build"
 
+[[redirects]]
+  from = "/api/*"
+  to = "http://localhost:5003/api/:splat"
+  status = 200
+  force = true
+
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+
 
 [context.production.environment]
   NPM_FLAGS = "--legacy-peer-deps"
